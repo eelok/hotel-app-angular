@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Reservation } from '../models/reservation';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
   providedIn: 'root',
@@ -23,7 +24,7 @@ export class ReservationService {
   }
 
   createReservation(reservation: Reservation): void {
-    this.reservations.push(reservation);
+    (reservation.id = uuidv4()), this.reservations.push(reservation);
     console.log(reservation);
     localStorage.setItem('reservations', JSON.stringify(this.reservations));
   }
@@ -32,9 +33,6 @@ export class ReservationService {
     let fileredReservations = this.reservations.filter(
       (reservation) => reservation.id !== id
     );
-    if (fileredReservations.length == 0) {
-      throw new Error('reservation with the id:' + id + 'does not exitst');
-    }
     this.reservations = fileredReservations;
     localStorage.setItem('reservations', JSON.stringify(this.reservations));
     return this.reservations;

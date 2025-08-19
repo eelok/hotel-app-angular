@@ -6,7 +6,10 @@
             Guest Email: {{reservation.guestName}} <br>
             Guest Email: {{reservation.guestEmail}} <br>
             Room Number: {{reservation.roomNumber}} <br>
+            <button (click)="deleteReservation(reservation.id)">Delete</button>
+            <button>Edit</button>
     </li>
+    
 </ul>
 <ng-template #noReservations >
     <h2>You don't have any reservations!</h2>
