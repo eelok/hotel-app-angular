@@ -1,3 +1,4 @@
+<app-home></app-home>
 <h2>Reservation List</h2>
 <ul *ngIf="reservations.length; else noReservations">
     <li *ngFor="let reservation of reservations">
@@ -9,7 +10,6 @@
             <button (click)="deleteReservation(reservation.id)">Delete</button>
             <button [routerLink]="['/edit', reservation.id]">Edit</button>
     </li>
-    
 </ul>
 <ng-template #noReservations >
     <h2>You don't have any reservations!</h2>
