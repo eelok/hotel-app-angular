@@ -24,7 +24,8 @@ export class ReservationService {
   }
 
   createReservation(reservation: Reservation): void {
-    (reservation.id = uuidv4()), this.reservations.push(reservation);
+    reservation.id = uuidv4();
+    this.reservations.push(reservation);
     console.log(reservation);
     localStorage.setItem('reservations', JSON.stringify(this.reservations));
   }
@@ -38,10 +39,8 @@ export class ReservationService {
     return this.reservations;
   }
 
-  updateReservation(undatedReservation: Reservation) {
-    let index = this.reservations.findIndex(
-      (res) => res.id === undatedReservation.id
-    );
+  updateReservation(id: string, undatedReservation: Reservation) {
+    let index = this.reservations.findIndex((res) => res.id === id);
     this.reservations[index] = undatedReservation;
     localStorage.setItem('reservations', JSON.stringify(this.reservations));
   }

@@ -7,7 +7,7 @@
             Guest Email: {{reservation.guestEmail}} <br>
             Room Number: {{reservation.roomNumber}} <br>
             <button (click)="deleteReservation(reservation.id)">Delete</button>
-            <button>Edit</button>
+            <button [routerLink]="['/edit', reservation.id]">Edit</button>
     </li>
     
 </ul>
