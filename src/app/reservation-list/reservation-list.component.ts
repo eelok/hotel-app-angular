@@ -10,13 +10,17 @@ import { Reservation } from '../models/reservation';
 export class ReservationListComponent implements OnInit {
   reservations: Reservation[] = [];
 
-  constructor(private reservationService: ReservationService) {}
+  constructor(private reservationService: ReservationService) { }
 
   ngOnInit(): void {
-    this.reservations = this.reservationService.getReservations();
+    this.reservationService
+      .getReservations()
+      .subscribe((resFromApi) => (this.reservations = resFromApi));
   }
 
   deleteReservation(id: string) {
-    this.reservations = this.reservationService.deleteReservation(id);
+    this.reservationService.deleteReservation(id).subscribe(() => {
+      console.log('delete request got processe!');
+    });
   }
 }

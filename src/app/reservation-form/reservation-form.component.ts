@@ -16,7 +16,7 @@ export class ReservationFormComponent implements OnInit {
     private reservationService: ReservationService,
     private router: Router,
     private activatedRoute: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.reservationForm = this.formBuilder.group({
@@ -30,11 +30,13 @@ export class ReservationFormComponent implements OnInit {
     let id = this.activatedRoute.snapshot.paramMap.get('id');
 
     if (id) {
-      let reservation = this.reservationService.getReservation(id);
-
-      if (reservation) {
-        this.reservationForm.patchValue(reservation!);
-      }
+      this.reservationService
+        .getReservation(id)
+        .subscribe((reservationFromApi) => {
+          if (reservationFromApi) {
+            this.reservationForm.patchValue(reservationFromApi);
+          }
+        });
     }
   }
 
@@ -45,11 +47,15 @@ export class ReservationFormComponent implements OnInit {
       let id = this.activatedRoute.snapshot.paramMap.get('id');
 
       if (!id) {
-        console.log('VALUE: ', this.reservationForm.value);
-        console.log('NEW RESERVATION:', newReservation);
-        this.reservationService.createReservation(newReservation);
+        this.reservationService
+          .createReservation(newReservation)
+          .subscribe(() => {
+            console.log('new reservation was rpecessed');
+          });
       } else {
-        this.reservationService.updateReservation(id, newReservation);
+        this.reservationService
+          .updateReservation(id, newReservation)
+          .subscribe(() => console.log("update request was processed"));
       }
 
       this.router.navigate(['/list']);

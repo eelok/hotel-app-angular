@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Reservation } from '../models/reservation';
 import { v4 as uuidv4 } from 'uuid';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -8,29 +10,28 @@ import { v4 as uuidv4 } from 'uuid';
 export class ReservationService {
   private reservations: Reservation[] = [];
 
-  getReservations(): Reservation[] {
-    return this.reservations;
+  private baseUrl = 'http://localhost:3001/';
+
+  constructor(private http: HttpClient) { }
+
+  getReservations(): Observable<Reservation[]> {
+    return this.http.get<Reservation[]>(this.baseUrl + 'reservations');
   }
 
-  getReservation(id: string): Reservation | undefined {
-    return this.reservations.find((reservation) => reservation.id === id);
+  getReservation(id: string): Observable<Reservation> {
+    return this.http.get<Reservation>(`${this.baseUrl}reservations/${id}`);
   }
 
-  createReservation(reservation: Reservation): void {
+  createReservation(reservation: Reservation): Observable<void> {
     reservation.id = uuidv4();
-    this.reservations.push(reservation);
+    return this.http.post<void>(this.baseUrl + 'reservations', reservation);
   }
 
-  deleteReservation(id: string): Reservation[] {
-    let fileredReservations = this.reservations.filter(
-      (reservation) => reservation.id !== id
-    );
-    this.reservations = fileredReservations;
-    return this.reservations;
+  deleteReservation(id: string): Observable<void> {
+    return this.http.delete<void>(this.baseUrl + 'reservations/' + id);
   }
 
-  updateReservation(id: string, undatedReservation: Reservation) {
-    let index = this.reservations.findIndex((res) => res.id === id);
-    this.reservations[index] = undatedReservation;
+  updateReservation(id: string, undatedReservation: Reservation): Observable<void> {
+    return this.http.put<void>(this.baseUrl + 'reservations/' + id, undatedReservation);
   }
 }
